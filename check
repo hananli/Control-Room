@@ -1,1 +1,40 @@
-https://www.dropbox.com/s/2c2ff9tez8jk3xh/check.php
+<?php 
+session_start(); 
+//$valid_userName = "maty"; 
+//$valid_password = "1234"; 
+  
+  
+  
+include('../config/db_connection.php'); 
+  
+$userName =$_POST['userName']; 
+$password =$_POST['password']; 
+$result = mysql_query("SELECT * FROM contactlist WHERE userName='$userName' AND job='מנהל'"); 
+while($row = mysql_fetch_array($result)) 
+    { 
+        $real_password = $row['password']; 
+        $firstName = $row['firstName']; 
+        $lastName = $row['lastName']; 
+        $theJob = $row['job']; 
+        //$user_id = $row['user_id']; 
+        if($real_password==$password){ 
+          
+            $_SESSION['firstName']=$firstName;  
+            $_SESSION['lastName']=$lastName;  
+            $_SESSION['theJob']=$theJob;  
+            //$_SESSION['user_id']=$user_id;  
+            $_SESSION["inloggning"] = true;  
+              
+            header("Location:../home/home.php"); 
+              
+        }    
+        else{ 
+            header("Location: login.php"); 
+        } 
+} 
+  
+if(!($_SESSION["inloggning"]==true)) // if there is no valid session 
+{ 
+    header("Location:../login/login.php"); 
+} 
+?> 
